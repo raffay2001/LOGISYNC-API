@@ -79,6 +79,7 @@ async def register_user(user: UserSchema = Body(...)):
 @router.post("/login", response_description="User login")
 async def login_user(user: LoginSchema = Body(...)):
     try:
+        print(user)
         user_data = user_collection.find_one({"email": user.email})
         if user_data is None or not verify_password(user.password, user_data["password"]):
             raise HTTPException(status_code=400, detail="Invalid email or password")
