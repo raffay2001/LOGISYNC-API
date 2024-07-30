@@ -15,6 +15,7 @@ from mappymatch.constructs.trace import Trace
 from mappymatch.maps.nx.nx_map import NxMap
 from mappymatch.matchers.lcss.lcss import LCSSMatcher
 from mappymatch.utils.plot import plot_matches
+import pandas as pd
 
 router = APIRouter()
 
@@ -176,11 +177,17 @@ async def get_rider_journeys(rider_id: str, current_user: dict = Depends(get_adm
 
         response = []
         for idx, journey in enumerate(journeys):
+            output_csv_path = f"./app/server/journeys/{rider_id}/output_journeys/{journey['_id']}_output.csv"
+            df_output = pd.read_csv(output_csv_path)
+            total_distance = df_output['kilometers'].sum()
+            total_time = df_output['travel_time'].sum() / 60  
             response.append({
                 "fullName": rider["fullname"],
                 "riderId": rider_id,
                 "journeyNo": idx + 1,
-                "journeyId": str(journey["_id"])
+                "journeyId": str(journey["_id"]),
+                "total_distance": total_distance,
+                "total_time": total_time
             })
 
         return JSONResponse(status_code=200, content=ResponseModel(response, "Rider's journeys fetched successfully."))
