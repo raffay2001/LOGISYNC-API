@@ -4,15 +4,19 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
-
+origins = [
+    "http://localhost:3000",  # React frontend origin
+    # Add other origins if necessary
+]
 # Allow CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this based on your requirements
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(AuthRouter, tags=["User"], prefix="")
 
