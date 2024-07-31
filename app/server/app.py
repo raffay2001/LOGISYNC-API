@@ -2,13 +2,12 @@ from fastapi import FastAPI
 from server.routes.auth import router as AuthRouter
 from fastapi.middleware.cors import CORSMiddleware
 
-
 app = FastAPI()
 
 # Allow CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this based on your requirements
+    allow_origins=["http://localhost:3000"],  # Adjust this based on your requirements
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

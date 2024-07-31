@@ -178,20 +178,29 @@ async def get_rider_journeys(rider_id: str, current_user: dict = Depends(get_adm
         response = []
         for idx, journey in enumerate(journeys):
             output_csv_path = f"./app/server/journeys/{rider_id}/output_journeys/{journey['_id']}_output.csv"
-            df_output = pd.read_csv(output_csv_path)
-            total_distance = df_output['kilometers'].sum()
-            total_time = df_output['travel_time'].sum() / 60  
-            response.append({
-                "fullName": rider["fullname"],
-                "riderId": rider_id,
-                "journeyNo": idx + 1,
-                "journeyId": str(journey["_id"]),
-                "total_distance": total_distance,
-                "total_time": total_time
-            })
+            if os.path.exists(output_csv_path):
+                df_output = pd.read_csv(output_csv_path)
+                total_distance = df_output['kilometers'].sum()
+                total_time = df_output['travel_time'].sum() / 60  
+                response.append({
+                    "fullName": rider["fullname"],
+                    "riderId": rider_id,
+                    "journeyNo": idx + 1,
+                    "journeyId": str(journey["_id"]),
+                    "total_distance": total_distance,
+                    "total_time": total_time
+                })
+            else:
+                response.append({
+                    "fullName": rider["fullname"],
+                    "riderId": rider_id,
+                    "journeyNo": idx + 1,
+                    "journeyId": str(journey["_id"]),
+                    "total_distance": 0,
+                    "total_time": 0
+                })
 
         return JSONResponse(status_code=200, content=ResponseModel(response, "Rider's journeys fetched successfully."))
-    
     except Exception as e:
         return ErrorResponseModel(str(e), 500, "Internal Server Error")
     
