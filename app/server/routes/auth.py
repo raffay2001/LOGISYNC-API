@@ -190,15 +190,6 @@ async def get_rider_journeys(rider_id: str, current_user: dict = Depends(get_adm
                     "total_distance": total_distance,
                     "total_time": total_time
                 })
-            else:
-                response.append({
-                    "fullName": rider["fullname"],
-                    "riderId": rider_id,
-                    "journeyNo": idx + 1,
-                    "journeyId": str(journey["_id"]),
-                    "total_distance": 0,
-                    "total_time": 0
-                })
 
         return JSONResponse(status_code=200, content=ResponseModel(response, "Rider's journeys fetched successfully."))
     except Exception as e:
