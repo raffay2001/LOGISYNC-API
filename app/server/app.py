@@ -7,7 +7,7 @@ app = FastAPI()
 # Allow CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Adjust this based on your requirements
+    allow_origins=["http://localhost:3000", "https://logisync-admin.vercel.app"],  # Adjust this based on your requirements
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
